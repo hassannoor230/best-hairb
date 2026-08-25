@@ -69,35 +69,40 @@ const limiter = rateLimit({
   max: 100,
   message: { success: false, message: "Too many requests, please try again later." },
 });
-app.use("/v1", limiter);
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10,
   message: { success: false, message: "Too many login attempts, please try again later." },
 });
-app.use("/v1/auth/login", authLimiter);
 
-app.use("/v1/health", (req, res) => {
-  res.status(200).json({ success: true, message: "API is healthy" });
-});
+const prefixes = ["/api/v1", "/v1"];
 
-app.get("/v1", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "Best Hair Salon API",
-    health: "/v1/health",
+prefixes.forEach((prefix) => {
+  app.use(`${prefix}/auth/login`, authLimiter);
+  app.use(`${prefix}`, limiter);
+
+  app.use(`${prefix}/health`, (req, res) => {
+    res.status(200).json({ success: true, message: "API is healthy" });
   });
-});
 
-app.use("/v1/auth", authRoutes);
-app.use("/v1/services", serviceRoutes);
-app.use("/v1/appointments", appointmentRoutes);
-app.use("/v1/contact", contactRoutes);
-app.use("/v1/reviews", reviewRoutes);
-app.use("/v1/gallery", galleryRoutes);
-app.use("/v1/faqs", faqRoutes);
-app.use("/v1/business", businessRoutes);
+  app.get(`${prefix}`, (req, res) => {
+    res.status(200).json({
+      success: true,
+      message: "Best Hair Salon API",
+      health: `${prefix}/health`,
+    });
+  });
+
+  app.use(`${prefix}/auth`, authRoutes);
+  app.use(`${prefix}/services`, serviceRoutes);
+  app.use(`${prefix}/appointments`, appointmentRoutes);
+  app.use(`${prefix}/contact`, contactRoutes);
+  app.use(`${prefix}/reviews`, reviewRoutes);
+  app.use(`${prefix}/gallery`, galleryRoutes);
+  app.use(`${prefix}/faqs`, faqRoutes);
+  app.use(`${prefix}/business`, businessRoutes);
+});
 
 app.use(notFound);
 app.use(errorHandler);
