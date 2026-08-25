@@ -1,8 +1,10 @@
 import Appointment from "../models/Appointment.js";
 import asyncHandler from "../utils/asyncHandler.js";
+import { sendAppointmentNotification } from "../services/emailService.js";
 
 export const createAppointment = asyncHandler(async (req, res) => {
   const appointment = await Appointment.create(req.body);
+  await sendAppointmentNotification(appointment);
   res.status(201).json({ success: true, data: appointment });
 });
 

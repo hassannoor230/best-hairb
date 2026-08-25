@@ -1,8 +1,10 @@
 import Contact from "../models/Contact.js";
 import asyncHandler from "../utils/asyncHandler.js";
+import { sendContactNotification } from "../services/emailService.js";
 
 export const createContact = asyncHandler(async (req, res) => {
   const contact = await Contact.create(req.body);
+  await sendContactNotification(contact);
   res.status(201).json({ success: true, data: contact });
 });
 

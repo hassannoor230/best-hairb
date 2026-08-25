@@ -18,7 +18,6 @@ import faqRoutes from "./routes/faqRoutes.js";
 import businessRoutes from "./routes/businessRoutes.js";
 
 dotenv.config();
-connectDB();
 
 const app = express();
 
@@ -51,6 +50,15 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
+
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 
 app.use(express.json());
 app.use(cookieParser());
