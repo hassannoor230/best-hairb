@@ -69,35 +69,35 @@ const limiter = rateLimit({
   max: 100,
   message: { success: false, message: "Too many requests, please try again later." },
 });
-app.use("/api", limiter);
+app.use("/v1", limiter);
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10,
   message: { success: false, message: "Too many login attempts, please try again later." },
 });
-app.use("/api/v1/auth/login", authLimiter);
+app.use("/v1/auth/login", authLimiter);
 
-app.use("/api/v1/health", (req, res) => {
+app.use("/v1/health", (req, res) => {
   res.status(200).json({ success: true, message: "API is healthy" });
 });
 
-app.get("/api/v1", (req, res) => {
+app.get("/v1", (req, res) => {
   res.status(200).json({
     success: true,
     message: "Best Hair Salon API",
-    health: "/api/v1/health",
+    health: "/v1/health",
   });
 });
 
-app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/services", serviceRoutes);
-app.use("/api/v1/appointments", appointmentRoutes);
-app.use("/api/v1/contact", contactRoutes);
-app.use("/api/v1/reviews", reviewRoutes);
-app.use("/api/v1/gallery", galleryRoutes);
-app.use("/api/v1/faqs", faqRoutes);
-app.use("/api/v1/business", businessRoutes);
+app.use("/v1/auth", authRoutes);
+app.use("/v1/services", serviceRoutes);
+app.use("/v1/appointments", appointmentRoutes);
+app.use("/v1/contact", contactRoutes);
+app.use("/v1/reviews", reviewRoutes);
+app.use("/v1/gallery", galleryRoutes);
+app.use("/v1/faqs", faqRoutes);
+app.use("/v1/business", businessRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
