@@ -54,6 +54,14 @@ app.use("/api/v1/health", (req, res) => {
   res.status(200).json({ success: true, message: "API is healthy" });
 });
 
+app.get("/api/v1", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Best Hair Salon API",
+    health: "/api/v1/health",
+  });
+});
+
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/services", serviceRoutes);
 app.use("/api/v1/appointments", appointmentRoutes);
