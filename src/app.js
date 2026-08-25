@@ -32,6 +32,7 @@ const configuredOrigins = (process.env.CLIENT_URLS || process.env.CLIENT_URL || 
   .filter(Boolean);
 const allowedOrigins = new Set([
   "http://localhost:5173",
+  "https://best-hairb.vercel.app",
   "https://best-hair.vercel.app",
   ...configuredOrigins,
 ]);
